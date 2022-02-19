@@ -76,15 +76,12 @@ def test_successful_update_self_pet_info(name='Корж', animal_type='Вель�
     _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
 
     #Если список не пустой, изменяем данные
-    if len(my_pets['pets']) > 0:
-        status, result = pf.update_pet_info(auth_key, my_pets['pets'][0]['id'], name, animal_type, age)
+    assert len(my_pets['pets']) > 0, 'В профиле учетной записи отсутсвуют сведения о питомцах'
+    status, result = pf.update_pet_info(auth_key, my_pets['pets'][0]['id'], name, animal_type, age)
 
-        #Проверяем статус ответа и соответствие имени заданному
-        assert status == 200
-        assert result['name'] == name
-    else:
-        #Если список питомцев пуст - вывести исключение
-        raise Exception('В профиле учетной записи отсутсвуют сведения о питомцах')
+    #Проверяем статус ответа и соответствие имени заданному
+    assert status == 200
+    assert result['name'] == name
 
 
 def test_add_new_pet_wo_photo_valid_data(name='КорГ без Fото', animal_type='corgi', age='1'):
@@ -113,15 +110,12 @@ def test_add_photo_of_pet(pet_photo='images/Corgi_Butt.jpg'):
     _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
 
     # Если список не пустой, изменяем данные
-    if len(my_pets['pets']) > 0:
-        status, result = pf.add_photo_of_pet(auth_key, my_pets['pets'][0]['id'], pet_photo)
+    assert len(my_pets['pets']) > 0, 'В профиле учетной записи отсутсвуют сведения о питомцах'
+    status, result = pf.add_photo_of_pet(auth_key, my_pets['pets'][0]['id'], pet_photo)
 
-        # Проверяем статус ответа и соответствие имени заданному
-        assert status == 200
-        assert result['pet_photo'] is not ''
-    else:
-        # Если список питомцев пуст - вывести исключение
-        raise Exception('В профиле учетной записи отсутсвуют сведения о питомцах')
+    # Проверяем статус ответа и соответствие имени заданному
+    assert status == 200
+    assert result['pet_photo'] is not ''
 
 
 def test_01_get_status_for_invalid_password(email=valid_email, password=invalid_password):
